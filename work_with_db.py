@@ -126,6 +126,7 @@ class Work_DB:
                         print(row)
         except Error as e:
             print(e)
+
     def change_type_row(self, table_name, column_name, type_data):
         alter_table_query = f"""
         ALTER TABLE {table_name} MODIFY COLUMN {column_name} {type_data}
@@ -159,6 +160,23 @@ class Work_DB:
             ) as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(drop_table)
+                    connection.commit()
+        except Error as e:
+            print(e)
+
+    def add_simple_record(self, phone_number, first_name, last_name, date_of_birth):
+        insert_query = f"""
+        INSERT INTO users (phone_number, first_name, last_name, date_of_birth) values ({phone_number}, "{first_name}", "{last_name}", "{date_of_birth}")
+        """
+        try:
+            with connect(  # TODO Maybe this block can move to the simple def
+                    host=HOST,
+                    user=self.user,
+                    password=self.password,
+                    database=self.name_db
+            ) as connection:
+                with connection.cursor() as cursor:
+                    cursor.execute(insert_query)
                     connection.commit()
         except Error as e:
             print(e)
@@ -208,6 +226,7 @@ class Work_DB:
                     connection.commit()
         except Error as e:
             print(e)
+
 
 work_db = Work_DB(USER, PASSWORD, 'my_test')
 print('====== SHOW DB =====')
@@ -260,11 +279,17 @@ print('===== Add several records ======')
 work_db.show_content_table_only_year('2342')
 
 print('===== Update record ======')
-update_record ="""
+update_record = """
 UPDATE users SET first_name = "lcdlcldl"  WHERE date_of_birth = "1112342" 
 """
 work_db.update_record(update_record)
 work_db.show_content_table()
+
+print('===== Simple record ======')
+
+work_db.add_simple_record(1221, 'Taut', 'Nikol', '12121')
+work_db.show_content_table()
+
 # work_db1 = Work_DB(USER, PASSWORD, 'online_movie_rating')
 # work_db1.create_new_db()
 #

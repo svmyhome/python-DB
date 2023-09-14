@@ -14,6 +14,8 @@ class Work_DB:
         self.password = password
         self.name_db = name_db
 
+    """Operation with structure DB"""
+
     def show_db(self):
 
         try:
@@ -93,40 +95,6 @@ class Work_DB:
         except Error as e:
             print(e)
 
-    def show_content_table(self):
-        try:
-            with connect(
-                    host=HOST,
-                    user=self.user,
-                    password=self.password,
-                    database=self.name_db
-            ) as connection:
-                show_db_query = f'SELECT * FROM {TABLE}'
-                with connection.cursor() as cursor:
-                    cursor.execute(show_db_query)
-                    result = cursor.fetchall()
-                    for row in result:
-                        print(row)
-        except Error as e:
-            print(e)
-
-    def show_content_table_only_year(self, date_of_birth):
-        try:
-            with connect(
-                    host=HOST,
-                    user=self.user,
-                    password=self.password,
-                    database=self.name_db
-            ) as connection:
-                show_db_query = f'SELECT * FROM {TABLE} WHERE date_of_birth = {date_of_birth}'
-                with connection.cursor() as cursor:
-                    cursor.execute(show_db_query)
-                    result = cursor.fetchall()
-                    for row in result:
-                        print(row)
-        except Error as e:
-            print(e)
-
     def change_type_row(self, table_name, column_name, type_data):
         alter_table_query = f"""
         ALTER TABLE {table_name} MODIFY COLUMN {column_name} {type_data}
@@ -161,6 +129,42 @@ class Work_DB:
                 with connection.cursor() as cursor:
                     cursor.execute(drop_table)
                     connection.commit()
+        except Error as e:
+            print(e)
+
+    """Operations with content tables"""
+
+    def show_content_table(self):
+        try:
+            with connect(
+                    host=HOST,
+                    user=self.user,
+                    password=self.password,
+                    database=self.name_db
+            ) as connection:
+                show_db_query = f'SELECT * FROM {TABLE}'
+                with connection.cursor() as cursor:
+                    cursor.execute(show_db_query)
+                    result = cursor.fetchall()
+                    for row in result:
+                        print(row)
+        except Error as e:
+            print(e)
+
+    def show_content_table_only_one_value(self, value, sell='phone_number'):
+        try:
+            with connect(
+                    host=HOST,
+                    user=self.user,
+                    password=self.password,
+                    database=self.name_db
+            ) as connection:
+                show_db_query = f'SELECT * FROM {TABLE} WHERE {sell} = {value}'
+                with connection.cursor() as cursor:
+                    cursor.execute(show_db_query)
+                    result = cursor.fetchall()
+                    for row in result:
+                        print(row)
         except Error as e:
             print(e)
 
@@ -275,8 +279,8 @@ multiple_query = [(1212, "Ivan", "IVANKO", "2342"), (1212, "Ivan", "IVANKO", "23
 work_db.add_multiple_records(insert_multiple_query, multiple_query)
 work_db.show_content_table()
 
-print('===== Add several records ======')
-work_db.show_content_table_only_year('2342')
+print('===== Show one value ======')
+work_db.show_content_table_only_one_value('23456789')
 
 print('===== Update record ======')
 update_record = """
@@ -285,10 +289,10 @@ UPDATE users SET first_name = "lcdlcldl"  WHERE date_of_birth = "1112342"
 work_db.update_record(update_record)
 work_db.show_content_table()
 
-print('===== Simple record ======')
-
-work_db.add_simple_record(1221, 'Taut', 'Nikol', '12121')
-work_db.show_content_table()
+# print('===== Simple record ======')
+#
+# work_db.add_simple_record(1221, 'Taut', 'Nikol', '12121')
+# work_db.show_content_table()
 
 # work_db1 = Work_DB(USER, PASSWORD, 'online_movie_rating')
 # work_db1.create_new_db()

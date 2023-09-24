@@ -3,9 +3,10 @@ https://www.dev-notes.ru/articles/devops/installing-mysql-server-on-ubuntu-22-04
 https://proglib.io/p/python-i-mysql-prakticheskoe-vvedenie-2021-01-06
 
 sudo apt install mysql-server mysql-client
+pip install mysql-connector-python
 
-sudo sudo mysql
+sudo mysql
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'passw';
 exit
 
-pip install mysql-connector-python
+mysql -u {user} -p

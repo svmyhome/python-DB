@@ -7,7 +7,7 @@ PASSWORD = 'passw'
 TABLE = 'users'
 
 
-class Work_DB:
+class Work_with_DB:
 
     def __init__(self, user, password, name_db):
         self.user = user
@@ -168,9 +168,9 @@ class Work_DB:
         except Error as e:
             print(e)
 
-    def add_simple_record(self, phone_number, first_name, last_name, date_of_birth):
+    def add_simple_record(self, phone_number, first_name, last_name, birthday):
         insert_query = f"""
-        INSERT INTO users (phone_number, first_name, last_name, date_of_birth) values ({phone_number}, "{first_name}", "{last_name}", "{date_of_birth}")
+        INSERT INTO users (phone_number, first_name, last_name, date_of_birth) values ({phone_number}, "{first_name}", "{last_name}", "{birthday}")
         """
         try:
             with connect(  # TODO Maybe this block can move to the simple def
@@ -232,17 +232,27 @@ class Work_DB:
             print(e)
 
 
-work_db = Work_DB(USER, PASSWORD, 'my_test')
+work_db = Work_with_DB(USER, PASSWORD, 'my_test')
 print('====== SHOW DB =====')
 work_db.show_db()
 print('===== SHOW TABLES ======')
+# new_table = """
+# CREATE TABLE users(
+#     id INT AUTO_INCREMENT PRIMARY KEY,
+#     title VARCHAR(100),
+#     release_year YEAR(4),
+#     genre VARCHAR(100),
+#     collection_in_mil INT
+# )
+# """
+
 new_table = """
-CREATE TABLE movies1(
+CREATE TABLE users(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100),
-    release_year YEAR(4),
-    genre VARCHAR(100),
-    collection_in_mil INT
+    phone_number INT,
+    first_name VARCHAR(10),
+    last_name VARCHAR(10),
+    date_of_birth DATE
 )
 """
 work_db.create_new_table(new_table)
